@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: 'Registrations API'
+  description: 'API to allow users to register'
+servers:
+  - url: https://api.example.com/
+paths:
+  /register/{regId}:
+    post:
+      summary: Returns a list of employees.
+      parameters:
+        - name: authToken
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: regId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '200':      # Response
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                description: Request limit per hour.
+          description: OK
+          content:  # Response body
+            application/json:  # Media type
+              schema:          # Must-have
+                $ref: '#/components/schemas/RegistrationResponse'
+
+components:
+  schemas:
+    RegistrationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The user ID.
+        age:
+          type: string
+          description: The user name.
+    RegistrationResponse:
+      type: object
+      properties:
+        registrationId:
+          type: integer
+          description: The user ID.
+        status:
+          type: string
+          description: The user name.
+          enum:
+            - APPROVED
+            - DECLINED
+            - INPROGRESS
