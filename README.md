@@ -1,3 +1,3 @@
-# Spring Boot Log4j 2
+# Spring Boot Log4j 2 with Open API Spec 3
 
-Article link : https://www.mkyong.com/spring-boot/spring-boot-log4j-2-example/
+Registration API with Spring boot Log4j 2 with Open API Spec 3

@@ -1,6 +1,12 @@
 pipeline {
     agent any
-
+    options { buildDiscarder(logRotator(numToKeepStr: '6')) }
+    parameters {
+            string(name: 'ansible_branch', defaultValue: 'master', description: 'Which Ansible branch to use for reading template vars ?')
+    }
+    /* tools {
+            maven 'apache-maven-3.0.1'
+    } */
     stages {
         stage('Build') {
             steps {
