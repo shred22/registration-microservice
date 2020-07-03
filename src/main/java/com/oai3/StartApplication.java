@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.openapitools", "org.openapitools.api" , "com.oai3"})
+@ComponentScan(basePackages = {"org.openapitools.api" ,"org.openapitools.configuration", "com.oai3"})
 @EnableSwagger2
 public class StartApplication {
 

@@ -8,14 +8,15 @@ pipeline {
             maven 'apache-maven-3.0.1'
     } */
     stages {
+
         stage('Build') {
-            steps {
-                sh 'mvn clean compile -DskipTests'
-            }
-        }
+                    steps {
+                        sh 'mvn clean install -DskipTests'
+                    }
+                }
         stage('Test') {
             steps {
-                sh 'mvn clean test'
+                sh 'mvn test'
             }
         }
         stage('Ansible Tweaks') {
@@ -31,15 +32,16 @@ pipeline {
              }
 
         }
+
+        stage('Deploy') {
+                    steps {
+                        echo 'Deploying....'
+                    }
+        }
         stage('Sonar Scan') {
                     steps {
                         sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=0675e85b9fa3ae24dd38fb9aa50715d7e7f23d5b'
                     }
         }
-        stage('Deploy') {
-                    steps {
-                        echo 'Deploying....'
-                    }
-                }
     }
 }
