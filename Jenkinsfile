@@ -35,7 +35,10 @@ pipeline {
 
         stage('Deploy') {
                     steps {
-                        echo 'Deploying....'
+                        dir("${env.WORKSPACE}/target") {
+                               echo 'Displaying contents .!!!'
+                               sh "ls -l"
+                         }
                     }
         }
         stage('Sonar Scan') {
