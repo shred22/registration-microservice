@@ -39,6 +39,14 @@ pipeline {
                                echo 'Displaying contents .!!!'
                                sh "ls -l"
                          }
+
+                         dir("${env.WORKSPACE}/deploy") {
+                              // sh "chmod -R 777 ."
+                               sh "cp -r ../target/boot-oai-log4j2-zip.zip ."
+                               sh "unzip -o boot-oai-log4j2-zip.zip"
+                               sh "ls -l"
+
+                         }
                     }
         }
         stage('Sonar Scan') {
