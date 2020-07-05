@@ -35,19 +35,21 @@ pipeline {
 
         stage('Deploy') {
                     steps {
-                        dir("${env.WORKSPACE}/target") {
-                               echo 'Displaying contents .!!!'
-                               sh "ls -l"
-                         }
-
                          dir("${env.WORKSPACE}/deploy") {
-                              // sh "chmod -R 777 ."
                                sh "cp -r ../target/boot-oai-log4j2-zip.zip ."
                                sh "unzip -o boot-oai-log4j2-zip.zip"
                                sh "ls -l"
+                               sh "./scripts/start-app.sh"
 
                          }
                     }
+        }
+        stage('Integration Tests') {
+               steps {
+                    dir("${env.WORKSPACE}/deploy") {
+                   sh './scripts/stop-app.sh'
+                       }
+               }
         }
         stage('Sonar Scan') {
                     steps {
