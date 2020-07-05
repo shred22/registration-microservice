@@ -7,6 +7,7 @@
     <formats>
         <format>zip</format>
     </formats>
+
     <fileSets>
         <fileSet>
             <directory>src/main/resources/scripts</directory>
@@ -15,7 +16,7 @@
                 <include>start-app.sh</include>
                 <include>stop-app.sh</include>
             </includes>
-            <fileMode>0755</fileMode>
+            <fileMode>0777</fileMode>
         </fileSet>
         <fileSet>
             <directory>src/main/resources</directory>
@@ -24,6 +25,7 @@
                 <include>*.properties</include>
                 <include>*.xml</include>
                 <include>*.yaml</include>
+                <include>*.properties.j2</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -34,20 +36,19 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>src/main/resources</directory>
-            <outputDirectory>logs</outputDirectory>
-            <fileMode>0755</fileMode>
-            <excludes>
-                <exclude>**/*</exclude>
-            </excludes>
+            <!-- Take everything inside the directories folder -->
+            <directory>${project.basedir}/src/main/java</directory>
+            <!-- And place it inside the root of the zip file -->
+            <outputDirectory>/</outputDirectory>
+
         </fileSet>
     </fileSets>
-    <files>
+    <!--<files>
         <file>
-            <source> ${project.build.directory}/${project.artifactId}-${project.version}.jar</source>
+            <source> ${project.build.directory}/${project.artifactId}.jar</source>
             <outputDirectory>/</outputDirectory>
         </file>
-    </files>
+    </files>-->
     <dependencySets>
         <dependencySet>
             <outputDirectory>lib</outputDirectory>

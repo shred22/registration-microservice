@@ -19,31 +19,41 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('Ansible Tweaks') {
-             steps {
-                    echo 'Deploying....'
-                    dir("${env.WORKSPACE}/ansible") {
-                      sh "ls -l"
-                      sh "rm -rfv *"
-                      sh "ls -l"
-                      sh "cp -r /home/dell/shreyas/Programming/Ansible/pipeline-data ."
-                      sh """ansible-playbook -i ./pipeline-data/inventory.txt ./pipeline-data/templating-playbook.yaml"""
-                    }
-             }
 
-        }
-
-        stage('Deploy') {
+        stage('Prepare Environment') {
                     steps {
                          dir("${env.WORKSPACE}/deploy") {
+                               echo "Displaying user info"
+                               sh "rm -rfv *"
                                sh "cp -r ../target/boot-oai-log4j2-zip.zip ."
                                sh "unzip -o boot-oai-log4j2-zip.zip"
                                sh "ls -l"
-                               sh "./scripts/start-app.sh"
+                               //sh "./scripts/start-app.sh"
 
                          }
                     }
         }
+        stage('Ansible Tweaks') {
+                     steps {
+                            echo 'Deploying....'
+                            dir("${env.WORKSPACE}/ansible") {
+                              sh "ls -l"
+                              sh "rm -rfv *"
+                              sh "ls -l"
+                              sh "cp -r /home/dell/shreyas/Programming/Ansible/pipeline-data ."
+                              sh """ansible-playbook -i ./pipeline-data/inventory.txt ./pipeline-data/templating-playbook.yaml"""
+                            }
+                     }
+
+         }
+         stage('Deploy App') {
+                 steps {
+                      dir("${env.WORKSPACE}/deploy") {
+                           sh "./scripts/start-app.sh"
+                        }
+                  }
+         }
+
         stage('Integration Tests') {
                steps {
                     dir("${env.WORKSPACE}/deploy") {
