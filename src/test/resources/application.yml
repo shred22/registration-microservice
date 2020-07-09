@@ -1,2 +1,2 @@
 api:
-  url: http://localhost:7887//register/{regId}
+  url: http://localhost:7887/register/{regId}

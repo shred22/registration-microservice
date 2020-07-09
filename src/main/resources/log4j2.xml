@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="DEBUG">
+<Configuration status="INFO">
     <Appenders>
         <Console name="LogToConsole" target="SYSTEM_OUT">
             <PatternLayout pattern="Shreyas Custom Pattern  %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
@@ -11,14 +11,14 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="com.oai3" level="debug" additivity="false">
+        <Logger name="com.oai3" level="info" additivity="false">
             <AppenderRef ref="LogToFile"/>
             <AppenderRef ref="LogToConsole"/>
         </Logger>
         <Logger name="org.springframework.boot" level="info" additivity="false">
             <AppenderRef ref="LogToConsole"/>
         </Logger>
-        <Root level="debug">
+        <Root level="info">
             <AppenderRef ref="LogToFile"/>
             <AppenderRef ref="LogToConsole"/>
         </Root>

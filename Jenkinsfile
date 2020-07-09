@@ -9,9 +9,9 @@ pipeline {
     } */
     stages {
 
-        stage('Build') {
+        stage('Build With Unit Tests') {
                     steps {
-                        sh 'mvn clean install -DskipTests'
+                        sh 'mvn clean install -Punit-tests'
                     }
                 }
         stage('Test') {
@@ -48,17 +48,20 @@ pipeline {
          }
          stage('Deploy App') {
                  steps {
-                      dir("${env.WORKSPACE}/deploy") {
+
+                 echo "Deploying .!!!!!!!!!!"
+                      /* dir("${env.WORKSPACE}/deploy") {
                            sh "./scripts/start-app.sh"
-                        }
+                        } */
                   }
          }
 
         stage('Integration Tests') {
                steps {
-                    dir("${env.WORKSPACE}/deploy") {
+                   /*  dir("${env.WORKSPACE}/deploy") {
                    sh './scripts/stop-app.sh'
-                       }
+                       } */
+                       sh "mvn clean install -Pintegration-tests"
                }
         }
         stage('Sonar Scan') {
