@@ -14,11 +14,6 @@ pipeline {
                         sh 'mvn clean install -Punit-tests'
                     }
                 }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
 
         stage('Prepare Environment') {
                     steps {
