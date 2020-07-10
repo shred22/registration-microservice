@@ -23,12 +23,10 @@ pipeline {
                                sh "cp -r ../target/boot-oai-log4j2-zip.zip ."
                                sh "unzip -o boot-oai-log4j2-zip.zip"
                                sh "ls -l"
-                               //sh "./scripts/start-app.sh"
-
                          }
                     }
         }
-        stage('Ansible Tweaks') {
+        stage('Modify Config With Ansible') {
                      steps {
                             echo 'Deploying....'
                             dir("${env.WORKSPACE}/ansible") {
@@ -41,11 +39,29 @@ pipeline {
                      }
 
          }
+          stage('Start Application') {
+                        steps {
+                                 dir("${env.WORKSPACE}/deploy/scripts") {
+                                    echo "Current Dir is:"
+                                    sh "pwd"
+                                    sh "./start-app.sh"
+                                 }
+                        }
+                 }
         stage('Integration Tests') {
                steps {
-                       sh "mvn test -Pintegration-tests"
+                       sh "mvn test -Pintegration-tests,test-ci"
                }
         }
+         stage('Stop Application') {
+               steps {
+                    echo "Current Dir is:"
+                     sh "pwd"
+                     dir("${env.WORKSPACE}/deploy/scripts") {
+                          sh "./stop-app.sh"
+                     }
+                }
+         }
         stage('Sonar Scan') {
                     steps {
                         sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=0675e85b9fa3ae24dd38fb9aa50715d7e7f23d5b'

@@ -13,8 +13,7 @@
             <directory>src/main/resources/scripts</directory>
             <outputDirectory>scripts</outputDirectory>
             <includes>
-                <include>start-app.sh</include>
-                <include>stop-app.sh</include>
+                <include>*.sh</include>
             </includes>
             <fileMode>0777</fileMode>
         </fileSet>
