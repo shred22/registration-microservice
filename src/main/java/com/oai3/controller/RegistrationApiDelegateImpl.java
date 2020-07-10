@@ -20,9 +20,7 @@ public class RegistrationApiDelegateImpl implements RegisterApiDelegate {
                                                               String regId,
                                                               RegistrationRequest registrationRequest) {
 
-        LOG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>   Header Parameter is : " + authToken);
-        LOG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>   Path Parameter is : " + regId);
-        LOG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>   Request is : " + registrationRequest);
+        LOG.info("Request Landed with Header Param : {}, Path Param : {} and Request Body as : {}",authToken, regId, registrationRequest);
         RegistrationResponse registrationResponse = new RegistrationResponse();
         registrationResponse.status(RegistrationResponse.StatusEnum.APPROVED);
         return ResponseEntity.status(HttpStatus.CREATED).header(" X-RateLimit-Limit", "10").body(registrationResponse);

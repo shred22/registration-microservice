@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    options { buildDiscarder(logRotator(numToKeepStr: '6')) }
+    options { buildDiscarder(logRotator(numToKeepStr: '5')) }
     parameters {
             string(name: 'ansible_branch', defaultValue: 'master', description: 'Which Ansible branch to use for reading template vars ?')
     }
@@ -41,22 +41,9 @@ pipeline {
                      }
 
          }
-         stage('Deploy App') {
-                 steps {
-
-                 echo "Deploying .!!!!!!!!!!"
-                      /* dir("${env.WORKSPACE}/deploy") {
-                           sh "./scripts/start-app.sh"
-                        } */
-                  }
-         }
-
         stage('Integration Tests') {
                steps {
-                   /*  dir("${env.WORKSPACE}/deploy") {
-                   sh './scripts/stop-app.sh'
-                       } */
-                       sh "mvn clean install -Pintegration-tests"
+                       sh "mvn test -Pintegration-tests"
                }
         }
         stage('Sonar Scan') {
