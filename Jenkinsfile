@@ -22,6 +22,7 @@ pipeline {
                                sh "rm -rfv *"
                                sh "cp -r ../target/boot-oai-log4j2-zip.zip ."
                                sh "unzip -o boot-oai-log4j2-zip.zip"
+                               sh "cp lib/logging-log4j2-1.0.jar ."
                                sh "ls -l"
                          }
                     }
