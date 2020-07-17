@@ -23,7 +23,9 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.basedir}/target/coverage-reports/jacoco-unit.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-unit,${project.basedir}/target/site/jacoco-it</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${project.basedir}/target/site/jacoco-unit,${project.basedir}/target/site/jacoco-it
+        </sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
@@ -37,8 +39,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-
-        <!-- exclude logback , add log4j2 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -49,12 +49,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
@@ -112,7 +110,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.serenity-bdd/serenity-spring -->
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-spring</artifactId>
@@ -145,7 +142,6 @@
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -153,52 +149,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>com.oai3.StartApplication</mainClass>
-                            <classifier>exec</classifier>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>pre-integration-test</id>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-integration-test</id>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <mainClass>com.oai3.StartApplication</mainClass>
-                    <classifier>exec</classifier>
                 </configuration>
             </plugin>
-            <!-- <plugin>
-                 <artifactId>exec-maven-plugin</artifactId>
-                 <version>1.6.0</version>
-                 <groupId>org.codehaus.mojo</groupId>
-                 <executions>
-                     <execution>&lt;!&ndash; Run our version calculation script &ndash;&gt;
-                         <id>start-app</id>
-                         <phase>pre-integration-test</phase>
-                         <goals>
-                             <goal>exec</goal>
-                         </goals>
-                         <configuration>
-                             <executable>bash</executable>
-                             <commandlineArgs>handleResultJars.sh</commandlineArgs>
-                         </configuration>
-                     </execution>
-                 </executions>
-             </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -254,7 +208,6 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-
                             <inputSpec>${project.basedir}/src/main/resources/apispecs/registrationapi.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <library>spring-boot</library>
@@ -297,14 +250,14 @@
                         </configuration>
                     </execution>
                 </executions>
-                <configuration>
+              <!--  <configuration>
                     <includes>
                         <include>com.oai3.integration.test.**Runner.java</include>
                     </includes>
                     <excludes>
                         <exclude>com.oai3.tests.**</exclude>
                     </excludes>
-                </configuration>
+                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -469,6 +422,88 @@
                                 <exclude>com.oai3.tests.**</exclude>
                             </excludes>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>test-local</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>start-app</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${project.basedir}/src/main/resources/scripts/start-app-local.sh
+                                    </executable>
+                                    <arguments>${project.basedir}</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-app</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${project.basedir}/src/main/resources/scripts/stop-app-local.sh
+                                    </executable>
+                                    <arguments>${project.basedir}</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>test-ci</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>start-app</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${project.basedir}/src/main/resources/scripts/start-app.sh
+                                    </executable>
+                                    <arguments>${project.basedir}</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-app</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${project.basedir}/src/main/resources/scripts/stop-appd <depl></depl>.sh
+                                    </executable>
+                                    <arguments>${project.basedir}</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
