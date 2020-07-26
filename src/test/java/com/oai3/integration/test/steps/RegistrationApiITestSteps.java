@@ -1,6 +1,7 @@
 package com.oai3.integration.test.steps;
 
 import com.oai3.integration.test.BaseIntegrationTest;
+import com.oai3.request.factories.RegistrationApiRequestFactory;
 import cucumber.api.java8.En;
 import net.serenitybdd.core.Serenity;
 import org.junit.Assert;
@@ -8,20 +9,19 @@ import org.openapitools.model.RegistrationRequest;
 import org.openapitools.model.RegistrationResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class RegistrationApiITestSteps extends BaseIntegrationTest implements En {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationApiITestSteps.class);
     private RegistrationRequest registrationRequest;
-    @Value("${api.url}")
+    @Value("${registration.api.url}")
     private String endpoint;
+    @Autowired
+    private RegistrationApiRequestFactory requestFactory;
     private RegistrationResponse registrationResponse;
     private HttpStatus statusCode;
     private HttpHeaders responseHeaders;
@@ -33,23 +33,15 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest implements En
     }
     private void createRegistrationRequest() {
         LOGGER.info("----- Preparing Registration Request ------");
-        registrationRequest = new RegistrationRequest();
-        registrationRequest.setAge(25);
-        registrationRequest.setName("Nautiyal");
+        registrationRequest = requestFactory.createRegistrationRequest();
     }
     private void invokeService() {
         LOGGER.info("----- Invoking REST Service -------");
         RestTemplate template = new RestTemplate();
-        Map<String, String> vars = new HashMap<>();
-        vars.put("regId", "42");
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(endpoint)
-                .path("1124");
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("authToken", "custom-auth-token-shreyas");
-
         HttpEntity<RegistrationRequest> request = new HttpEntity<>(registrationRequest, headers);
-        ResponseEntity<RegistrationResponse> registrationResponseResponseEntity = template.exchange(endpoint, HttpMethod.POST, request, RegistrationResponse.class, vars);
+        ResponseEntity<RegistrationResponse> registrationResponseResponseEntity = template.exchange(endpoint, HttpMethod.POST, request, RegistrationResponse.class);
         registrationResponse = registrationResponseResponseEntity.getBody();
         statusCode = registrationResponseResponseEntity.getStatusCode();
         responseHeaders = registrationResponseResponseEntity.getHeaders();

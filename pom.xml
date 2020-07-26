@@ -295,14 +295,12 @@
                         </configuration>
                     </execution>
                 </executions>
-                <!--  <configuration>
-                      <includes>
-                          <include>com.oai3.integration.test.**Runner.java</include>
-                      </includes>
-                      <excludes>
-                          <exclude>com.oai3.tests.**</exclude>
-                      </excludes>
-                  </configuration>-->
+                <configuration>
+                    <excludes>
+                        <exclude>com.oai3.tests.**</exclude>
+                        <exclude>com.oai3.integration.test.**</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
