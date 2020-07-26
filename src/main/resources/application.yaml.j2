@@ -1,0 +1,13 @@
+server:
+  port: {{ server.port }}
+app:
+  stereo:
+    brand: {{ stereo.brand }}
+    connection: bluetooth
+    power: 12V
+spring:
+  datasource:
+    password: {{ ci.datasource.password }}
+    url: {{ ci.datasource.url }}
+    username: {{ ci.datasource.username }}
+
