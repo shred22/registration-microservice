@@ -34,7 +34,7 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest implements En
     private void createRegistrationRequest() {
         LOGGER.info("----- Preparing Registration Request ------");
         registrationRequest = new RegistrationRequest();
-        registrationRequest.setAge("25");
+        registrationRequest.setAge(25);
         registrationRequest.setName("Nautiyal");
     }
     private void invokeService() {

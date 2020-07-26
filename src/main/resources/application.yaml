@@ -1,0 +1,39 @@
+server:
+  port: 7887
+spring:
+  datasource:
+    password: password
+    url: jdbc:mysql://localhost:3306/bootdb?useSSL=false
+    username: devuser
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 7
+        max-idle: 7
+        max-wait: 1ms
+        min-idle: 2
+        shutdown-timeout: 200ms
+
+  cache:
+    type: redis
+    redis:
+      key-prefix: reg-
+      use-key-prefix: true
+      cache-null-values: false
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+

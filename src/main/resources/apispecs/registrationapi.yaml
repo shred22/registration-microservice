@@ -1,66 +1,182 @@
 openapi: 3.0.0
 info:
-  version: '1.0'
-  title: 'Registrations API'
-  description: 'API to allow users to register'
+    version: '1.0'
+    title: Registrations API
+    description: API to allow users to register
 servers:
-  - url: https://api.example.com/
+    -   url: https://api.example.com/
 paths:
-  /register/{regId}:
-    post:
-      summary: Returns a list of employees.
-      parameters:
-        - name: authToken
-          in: header
-          required: true
-          schema:
-            type: string
-        - name: regId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Optional description in *Markdown*
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegistrationRequest'
-      responses:
-        '200':      # Response
-          headers:
-            X-RateLimit-Limit:
-              schema:
-                type: integer
-                description: Request limit per hour.
-          description: OK
-          content:  # Response body
-            application/json:  # Media type
-              schema:          # Must-have
-                $ref: '#/components/schemas/RegistrationResponse'
+    /register:
+        post:
+            summary: Returns a list of employees.
+            parameters:
+                -   name: authToken
+                    in: header
+                    required: true
+                    schema:
+                        type: string
+
+            requestBody:
+                description: Optional description in *Markdown*
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegistrationRequest'
+            responses:
+                '201':
+                    headers:
+                        X-Correlation-Id:
+                            schema:
+                                type: string
+                                description: Co-relation-Id for this transaction.
+                    description: CREATED
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RegistrationResponse'
+                '400':
+                    headers:
+                        X-Correlation-Id:
+                            schema:
+                                type: string
+                                description: Co-relation-Id for this transaction.
+                    description: BAD REQUEST
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    /register/{regId}:
+        get:
+            parameters:
+                -   name: regId
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+                        format: int64
+            responses:
+                '200':
+                    headers:
+                        X-Correlation-Id:
+                            schema:
+                                type: string
+                                description: Co-relation-Id for this transaction.
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RegistrationDetailResponse'
+                '400':
+                    headers:
+                        X-Correlation-Id:
+                            schema:
+                                type: string
+                                description: Co-relation-Id for this transaction.
+                    description: BAD REQUEST
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
 
 components:
-  schemas:
-    RegistrationRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The user ID.
-        age:
-          type: string
-          description: The user name.
-    RegistrationResponse:
-      type: object
-      properties:
-        registrationId:
-          type: integer
-          description: The user ID.
-        status:
-          type: string
-          description: The user name.
-          enum:
-            - APPROVED
-            - DECLINED
-            - INPROGRESS
+    schemas:
+        RegistrationRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: The user ID.
+                age:
+                    type: integer
+                    description: The user name.
+                bloodGroup:
+                    type: string
+                    enum:
+                        - A
+                        - A+
+                        - B
+                        - B+
+                        - AB+
+                        - O
+                        - O+
+                physicalDisability:
+                    type: boolean
+                address:
+                    $ref: '#/components/schemas/Address'
+                existingMember:
+                    type: string
+                    enum:
+                        - Y
+                        - N
+        Address:
+            type: object
+            properties:
+                addressLine1:
+                    type: string
+                addressLine2:
+                    type: string
+                pincode:
+                    type: number
+                landmark:
+                    type: string
+        RegistrationResponse:
+            type: object
+            properties:
+                registrationId:
+                    type: integer
+                    format: int64
+                    description: The user ID.
+                status:
+                    type: string
+                    description: The user name.
+                    enum:
+                        - ACTIVE
+                        - INACTIVE
+                        - DELETED
+        RegistrationDetailResponse:
+            type: object
+            properties:
+                registrationId:
+                    type: integer
+                    format: int64
+                    description: The user ID.
+                status:
+                    type: string
+                    description: The user name.
+                    enum:
+                        - ACTIVE
+                        - INACTIVE
+                        - DELETED
+                candidateDetails:
+                    $ref: '#/components/schemas/CandidateDetails'
+
+        CandidateDetails:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: candidate's name
+                age:
+                    type: integer
+                    description: candiidate's age
+                address:
+                    $ref: '#/components/schemas/Address'
+
+        ErrorResponse:
+            type: object
+            properties:
+                faultId:
+                    type: integer
+                    format: int64
+                    description: The fault ID.
+                message:
+                    type: string
+                status:
+                    type: integer
+                    description: HTTP Status
+                timestamp:
+                    type: string
+                    format: date-time
+                path:
+                    type: string
