@@ -23,9 +23,9 @@ pipeline {
                          dir("${env.WORKSPACE}/deploy") {
                                echo "Displaying user info"
                                sh "rm -rfv *"
-                               sh "cp -r ../target/boot-oai-log4j2-zip.zip ."
-                               sh "unzip -o boot-oai-log4j2-zip.zip"
-                               sh "cp lib/logging-log4j2-1.0.jar ."
+                               sh "cp -r ../target/registration-service-bundle-zip.zip ."
+                               sh "unzip -o registration-service-bundle-zip.zip"
+                               sh "cp lib/registration-service.jar ."
                                sh "ls -l"
                          }
                     }
@@ -51,31 +51,31 @@ pipeline {
                                     sh "./start-app.sh"
                                  }
                         }
-                 }
+          }
         stage('Integration Tests') {
                steps {
-               configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
-                     sh "mvn clean install -Pintegration-tests,test-ci -s $MAVEN_SETTINGS"
-               }
+                    sleep(time:5,unit:"SECONDS")
+                    configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
+                        sh "mvn clean install -Pintegration-tests -s $MAVEN_SETTINGS"
+                    }
                       
                }
         }
-         stage('Stop Application') {
+          stage('Stop Application') {
                steps {
-                    echo "Current Dir is:"
-                     sh "pwd"
-                     dir("${env.WORKSPACE}/deploy/scripts") {
+                        echo "Current Dir is:"
+                        sh "pwd"
+                        dir("${env.WORKSPACE}/deploy/scripts") {
                           sh "./stop-app.sh"
-                     }
-                }
+                        }
+               }
          }
         stage('Sonar Scan') {
-                    steps {
-                     configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
+               steps {
+                   configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
                              sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=0675e85b9fa3ae24dd38fb9aa50715d7e7f23d5b -s $MAVEN_SETTINGS'
-                     }
-                       
-                    }
+                   }
+               }
         }
     }
 }

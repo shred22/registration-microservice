@@ -41,6 +41,7 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest implements En
         HttpHeaders headers = new HttpHeaders();
         headers.add("authToken", "custom-auth-token-shreyas");
         HttpEntity<RegistrationRequest> request = new HttpEntity<>(registrationRequest, headers);
+        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), endpoint);
         ResponseEntity<RegistrationResponse> registrationResponseResponseEntity = template.exchange(endpoint, HttpMethod.POST, request, RegistrationResponse.class);
         registrationResponse = registrationResponseResponseEntity.getBody();
         statusCode = registrationResponseResponseEntity.getStatusCode();

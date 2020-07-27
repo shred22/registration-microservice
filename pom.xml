@@ -208,6 +208,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -221,6 +222,8 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
+                    <finalName>${project.artifactId}</finalName>
+
                     <archive>
                         <index>true</index>
                         <manifest>
@@ -248,7 +251,7 @@
                     <descriptors>
                         <descriptor>src/main/resources/descriptor/build-descriptor.xml</descriptor>
                     </descriptors>
-                    <finalName>boot-oai-log4j2</finalName>
+                    <finalName>${project.artifactId}-bundle</finalName>
                 </configuration>
                 <executions>
                     <execution>
@@ -310,6 +313,10 @@
                         <configuration>
                             <!-- Sets the VM argument line usgration tests are run. -->
                             <argLine>${failsafeArgLine}</argLine>
+                            <excludes>
+                                <exclude>com.registration.tests.**</exclude>
+                                <exclude>com.registration.integration.test.**</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>

@@ -9,10 +9,10 @@ pwd
 rm -r "local-deploy"
 mkdir "local-deploy"
 echo "Created dir local-deploy"
-cp -r boot-oai-log4j2-zip.zip ./local-deploy
+cp -r registration-service-bundle-zip.zip ./local-deploy
 # shellcheck disable=SC2164
 cd "local-deploy"
 pwd
-unzip -o boot-oai-log4j2-zip.zip
+unzip -o registration-service-bundle-zip.zip
 echo "Copied ZIP and unzipped bundle"
-nohup java -jar lib/logging-log4j2-1.0.jar --spring.config.location=config/ & echo "$!" > ./scripts/boot-app-local.pid
+nohup java -jar lib/registration-service.jar --spring.config.location=config/ & echo "$!" > ./scripts/boot-app-local.pid
