@@ -6,7 +6,7 @@
     <groupId>com.registration</groupId>
     <packaging>jar</packaging>
     <name>Spring Boot log4j2 Example</name>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -27,7 +27,7 @@
     </properties>
 
     <scm>
-        <connection>scm:git:http://github.com/shred22/spring-boot-oai3</connection>
+        <connection>scm:git:http://github.com/shred22/spring-boot-oai3.git</connection>
         <url>https://github.com/shred22/spring-boot-oai3.git</url>
         <developerConnection>scm:git:https://github.com/shred22/spring-boot-oai3.git</developerConnection>
       <tag>regservice1.0</tag>
