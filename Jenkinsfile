@@ -11,7 +11,10 @@ pipeline {
 
         stage('Build With Unit Tests') {
                     steps {
-                        sh 'mvn clean install -Punit-tests'
+                     configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
+                            sh 'mvn clean install -Punit-tests -s $MAVEN_SETTINGS'
+                     }
+                        
                     }
                 }
 
@@ -51,7 +54,10 @@ pipeline {
                  }
         stage('Integration Tests') {
                steps {
-                       sh "mvn test -Pintegration-tests,test-ci"
+               configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
+                     sh "mvn clean install -Pintegration-tests,test-ci -s $MAVEN_SETTINGS"
+               }
+                      
                }
         }
          stage('Stop Application') {
@@ -65,7 +71,10 @@ pipeline {
          }
         stage('Sonar Scan') {
                     steps {
-                        sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=0675e85b9fa3ae24dd38fb9aa50715d7e7f23d5b'
+                     configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
+                             sh 'mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=0675e85b9fa3ae24dd38fb9aa50715d7e7f23d5b -s $MAVEN_SETTINGS'
+                     }
+                       
                     }
         }
     }
