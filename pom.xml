@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-	http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>logging-log4j2</artifactId>
+    <artifactId>registration-service</artifactId>
+    <groupId>com.registration</groupId>
     <packaging>jar</packaging>
     <name>Spring Boot log4j2 Example</name>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -27,6 +25,25 @@
             ${project.basedir}/target/site/jacoco-unit,${project.basedir}/target/site/jacoco-it
         </sonar.coverage.jacoco.xmlReportPaths>
     </properties>
+
+    <scm>
+        <connection>scm:git:http://github.com/shred22/spring-boot-oai3</connection>
+        <url>https://github.com/shred22/spring-boot-oai3.git</url>
+        <developerConnection>scm:git:https://github.com/shred22/spring-boot-oai3.git</developerConnection>
+      <tag>regservice</tag>
+  </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>maven-snapshots</name>
+            <url>http://localhost:8081/repository/internal-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus</id>
+            <name>maven-releases</name>
+            <url>http://localhost:8081/repository/internal-releases/</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
 
@@ -195,7 +212,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.oai3.StartApplication</mainClass>
+                    <mainClass>com.registration.StartApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -207,7 +224,7 @@
                         <index>true</index>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.oai3.StartApplication</mainClass>
+                            <mainClass>com.registration.StartApplication</mainClass>
                         </manifest>
                         <manifestEntries>
                             <mode>development</mode>
@@ -224,7 +241,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.oai3.StartApplication</mainClass>
+                            <mainClass>com.registration.StartApplication</mainClass>
                         </manifest>
                     </archive>
                     <descriptors>
@@ -297,8 +314,8 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>com.oai3.tests.**</exclude>
-                        <exclude>com.oai3.integration.test.**</exclude>
+                        <exclude>com.registration.tests.**</exclude>
+                        <exclude>com.registration.integration.test.**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -406,7 +423,15 @@
                         </configuration>
                     </execution>
                 </executions>
-
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <tagNameFormat>regservice@{project.version}</tagNameFormat>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -425,10 +450,10 @@
                         <version>3.0.0-M5</version>
                         <configuration>
                             <includes>
-                                <include>com.oai3.tests.**</include>
+                                <include>com.registration.tests.**</include>
                             </includes>
                             <excludes>
-                                <exclude>com.oai3.integration.test.**</exclude>
+                                <exclude>com.registration.integration.test.**</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -448,8 +473,8 @@
                         <version>3.0.0-M5</version>
                         <configuration>
                             <excludes>
-                                <exclude>com.oai3.tests.**</exclude>
-                                <exclude>com.oai3.integration.test.**</exclude>
+                                <exclude>com.registration.tests.**</exclude>
+                                <exclude>com.registration.integration.test.**</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -459,10 +484,10 @@
                         <version>3.0.0-M5</version>
                         <configuration>
                             <includes>
-                                <include>com.oai3.integration.test.**Runner.java</include>
+                                <include>com.registration.integration.test.**Runner.java</include>
                             </includes>
                             <excludes>
-                                <exclude>com.oai3.tests.**</exclude>
+                                <exclude>com.registration.tests.**</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -541,7 +566,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>${project.basedir}/src/main/resources/scripts/stop-appd <depl></depl>.sh
+                                    <executable>${project.basedir}/src/main/resources/scripts/stop-app.sh
                                     </executable>
                                     <arguments>${project.basedir}</arguments>
                                 </configuration>
