@@ -3,7 +3,7 @@
 # shellcheck disable=SC2164
 cd "$1"
 pwd
-cd "target/local-deploy"
+cd "target/local-deploy/scripts"
 pwd
 echo "Bye Bye ...!!!!!!!!!"
 read -r _pid < boot-app-local.pid

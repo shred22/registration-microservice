@@ -15,4 +15,4 @@ cd "local-deploy"
 pwd
 unzip -o boot-oai-log4j2-zip.zip
 echo "Copied ZIP and unzipped bundle"
-nohup java -cp "lib/*" com.oai3.StartApplication --spring.config.location=config/ & echo "$!" >> boot-app-local.pid
+nohup java -jar lib/logging-log4j2-1.0.jar --spring.config.location=config/ & echo "$!" > ./scripts/boot-app-local.pid

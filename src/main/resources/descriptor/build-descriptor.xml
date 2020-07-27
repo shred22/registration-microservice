@@ -24,6 +24,7 @@
                 <include>*.properties</include>
                 <include>*.xml</include>
                 <include>*.yaml</include>
+                <include>*.yaml.j2</include>
                 <include>*.properties.j2</include>
             </includes>
         </fileSet>
