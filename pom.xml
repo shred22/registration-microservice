@@ -28,10 +28,10 @@
     </properties>
 
     <scm>
-        <connection>scm:git:http://github.com/shred22/spring-boot-oai3.git</connection>
-        <url>https://github.com/shred22/spring-boot-oai3.git</url>
-        <developerConnection>scm:git:https://github.com/shred22/spring-boot-oai3.git</developerConnection>
-      <tag>regservice1.0</tag>
+        <connection>scm:git:git@github.com:shred22/spring-boot-oai3.git</connection>
+        <developerConnection>scm:git:git@github.com:shred22/spring-boot-oai3.git</developerConnection>
+        <url>git@github.com:shred22/spring-boot-oai3.git</url>
+      <tag>regservice-${project.version}</tag>
   </scm>
     <distributionManagement>
         <snapshotRepository>
