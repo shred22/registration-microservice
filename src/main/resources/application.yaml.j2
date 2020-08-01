@@ -2,10 +2,24 @@ server:
   port: {{ server.port }}
 
 spring:
-  datasource:
-    password: {{ ci.datasource.password }}
-    url: {{ ci.datasource.url }}
-    username: {{ ci.datasource.username }}
+  jta:
+   enabled: true
+   service: com.atomikos.icatch.standalone.UserTransactionServiceFactory
+   max-actives: 200
+   enable-logging: true
+   atomikos:
+     datasource:
+       unique-resource-name: dataSourceOne
+       max-pool-size: 5
+       min-pool-size: 1
+       max-life-time: 20000
+       borrow-connection-timeout: 10000
+       xa-data-source-class-name: com.mysql.cj.jdbc.MysqlXADataSource
+       xa-properties:
+         user: devuser
+         password: password
+         URL: {{ jta.atomikos.datasource.xa-properties.URL }}
+
   jpa:
     hibernate:
       ddl-auto: update

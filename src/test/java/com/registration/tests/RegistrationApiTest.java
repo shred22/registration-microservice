@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.*;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,6 +37,7 @@ public class RegistrationApiTest {
     private RegistrationApiRequestFactory requestFactory;
 
     @Test
+    @Rollback
     public void testAPI() throws JsonProcessingException {
 
         RestTemplate restTemplate = new RestTemplate();

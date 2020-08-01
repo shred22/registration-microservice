@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.12.RELEASE</version>
+        <version>2.2.6.RELEASE</version>
     </parent>
 
     <properties>
@@ -25,6 +25,11 @@
             ${project.basedir}/target/site/jacoco-unit,${project.basedir}/target/site/jacoco-it
         </sonar.coverage.jacoco.xmlReportPaths>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+        <dbdeploy.version>3.0M3</dbdeploy.version>
+        <mysql.connector.version>6.0.6</mysql.connector.version>
+        <cglib.version>2.2.2</cglib.version>
+        <dbdeploy.user>devuser</dbdeploy.user>
+        <dbdeploy.password>password</dbdeploy.password>
     </properties>
 
     <scm>
@@ -88,6 +93,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jta-atomikos</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
@@ -441,6 +451,29 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.dbdeploy</groupId>
+                <artifactId>maven-dbdeploy-plugin</artifactId>
+                <version>3.0M3</version>
+                <configuration>
+                    <scriptdirectory>${project.basedir}/src/main/resources/database/scripts</scriptdirectory>
+                    <driver>com.mysql.cj.jdbc.Driver</driver>
+                    <url>jdbc:mysql://localhost:3306/bootdb?useSSL=false</url>
+                    <userid>${dbdeploy.user}</userid>
+                    <password>${dbdeploy.password}</password>
+                    <dbms>mysql</dbms>
+                    <delimiter>;</delimiter>
+                    <delimiterType>row</delimiterType>
+                </configuration>
+                <inherited>false</inherited>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql.connector.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -578,6 +611,44 @@
                                     </executable>
                                     <arguments>${project.basedir}</arguments>
                                 </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>database-update</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.dbdeploy</groupId>
+                        <artifactId>maven-dbdeploy-plugin</artifactId>
+                        <version>3.0M3</version>
+                        <configuration>
+                            <scriptdirectory>database/scripts</scriptdirectory>
+                            <driver>com.mysql.cj.jdbc.Driver</driver>
+                            <url>jdbc:mysql://localhost:3306/bootdb?useSSL=false</url>
+                            <userid>${dbdeploy.user}</userid>
+                            <password>${dbdeploy.password}</password>
+                            <dbms>mysql</dbms>
+                            <delimiter>;</delimiter>
+                            <delimiterType>row</delimiterType>
+                        </configuration>
+                        <inherited>false</inherited>
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>${mysql.connector.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>update</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
