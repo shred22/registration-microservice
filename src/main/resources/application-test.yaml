@@ -1,24 +1,23 @@
 server:
-  port: {{ server.port }}
-
+  port: 7887
 spring:
   jta:
-   enabled: true
-   service: com.atomikos.icatch.standalone.UserTransactionServiceFactory
-   max-actives: 200
-   enable-logging: true
-   atomikos:
-     datasource:
-       unique-resource-name: dataSourceOne
-       max-pool-size: 5
-       min-pool-size: 1
-       max-life-time: 20000
-       borrow-connection-timeout: 10000
-       xa-data-source-class-name: com.mysql.cj.jdbc.MysqlXADataSource
-       xa-properties:
-         user: devuser
-         password: password
-         URL: {{ jta.atomikos.datasource.xa-properties.URL }}
+    enabled: true
+    service: com.atomikos.icatch.standalone.UserTransactionServiceFactory
+    max-actives: 200
+    enable-logging: true
+    atomikos:
+      datasource:
+        unique-resource-name: dataSourceOne
+        max-pool-size: 5
+        min-pool-size: 1
+        max-life-time: 20000
+        borrow-connection-timeout: 10000
+        xa-data-source-class-name: com.mysql.cj.jdbc.MysqlXADataSource
+        xa-properties:
+          user: devuser
+          password: password
+          URL: jdbc:mysql://localhost:3306/bootdb?useSSL=false
 
   jpa:
     hibernate:
@@ -31,7 +30,7 @@ spring:
     show-sql: true
   redis:
     host: localhost
-    port: 6379
+    port: 6479
     password:
     lettuce:
       pool:
@@ -49,7 +48,7 @@ spring:
 
   jackson:
     serialization:
-     write-dates-as-timestamps: false
+      write-dates-as-timestamps: false
 
 management:
   endpoints:
@@ -59,4 +58,3 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
-

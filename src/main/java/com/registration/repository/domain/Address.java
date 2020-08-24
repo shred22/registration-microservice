@@ -3,6 +3,7 @@ package com.registration.repository.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Builder
 @Getter
 @Setter
+@RedisHash("address")
 public class Address {
 
 

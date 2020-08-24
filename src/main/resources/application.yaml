@@ -15,9 +15,9 @@ spring:
         borrow-connection-timeout: 10000
         xa-data-source-class-name: com.mysql.cj.jdbc.MysqlXADataSource
         xa-properties:
-          user: devuser
+          user: dockdevuser
           password: password
-          URL: jdbc:mysql://localhost:3306/bootdb?useSSL=false
+          URL: jdbc:mysql://docker-mysql/bootdb?useSSL=false
   jpa:
     hibernate:
       ddl-auto: update
@@ -28,25 +28,31 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
   redis:
-    host: localhost
+    host: 172.26.0.3
     port: 6379
     password:
     lettuce:
       pool:
         max-active: 7
         max-idle: 7
-        max-wait: 1ms
+        max-wait: 100ms
         min-idle: 2
-        shutdown-timeout: 200ms
-
+        shutdown-timeout: 2000ms
   cache:
     type: redis
     redis:
-      key-prefix: reg-
-      use-key-prefix: true
+      use-key-prefix: false
       cache-null-values: false
 
   jackson:
     serialization:
       write-dates-as-timestamps: false
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS

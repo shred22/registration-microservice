@@ -1,0 +1,85 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: Authentication API
+  description: API to allow users to authenticate and get access to JWT for further requests
+servers:
+  -   url: http://localhost:7887/
+paths:
+  /authenticate:
+    post:
+      summary: API to Facilitate its users to get access to JWT Auth Token
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+      responses:
+        '200':
+          description: OK Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    AuthenticationRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: The user ID.
+          minLength: 3
+          maxLength: 12
+        password:
+          type: string
+          description: The Password.
+          minLength: 8
+          maxLength: 16
+
+
+    AuthenticationResponse:
+      type: object
+      required:
+        - jwt
+      properties:
+        jwt:
+          type: string
+          description: The user ID.
+    ErrorResponse:
+      type: object
+      properties:
+        faultId:
+          type: integer
+          format: int64
+          description: The fault ID.
+        message:
+          type: string
+        status:
+          type: integer
+          description: HTTP Status
+        timestamp:
+          type: string
+          format: date-time
+        path:
+          type: string

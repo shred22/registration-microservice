@@ -28,6 +28,13 @@
             </includes>
         </fileSet>
         <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>config</outputDirectory>
+            <includes>
+                <include>dockerfile</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>target</directory>
             <outputDirectory>lib</outputDirectory>
             <includes>

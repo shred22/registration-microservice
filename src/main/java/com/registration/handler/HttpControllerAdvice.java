@@ -1,6 +1,9 @@
 package com.registration.handler;
 
 
+import com.registration.handler.error.SchemaValidationFailedException;
+import com.registration.handler.error.SchemaValidationFailureDetails;
+import com.registration.handler.error.SecurityFailedException;
 import org.jsoup.HttpStatusException;
 import org.openapitools.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
 public class HttpControllerAdvice {
@@ -69,6 +74,38 @@ public class HttpControllerAdvice {
         error.setPath(request.getRequestURI());
 
         return new ResponseEntity<>(error, HttpStatus.METHOD_NOT_ALLOWED);
+
+    }
+
+    @ExceptionHandler(value = SchemaValidationFailedException.class)
+    public ResponseEntity<List<ErrorResponse>> handleSchemaValidationFailedException(HttpServletRequest request, HttpServletResponse response, SchemaValidationFailedException e) {
+
+        List<ErrorResponse> errors = new ArrayList<>();
+        for (SchemaValidationFailureDetails failureDetail : e.getFailureDetails()) {
+            ErrorResponse error = new ErrorResponse();
+            error.setFaultId((long) e.hashCode());
+            error.setTimestamp(OffsetDateTime.now());
+            error.setStatus(HttpStatus.BAD_REQUEST.value());
+            error.setMessage(failureDetail.getErrorKey() +" : "+ failureDetail.getErrorMessage());
+            error.setPath(request.getRequestURI());
+            errors.add(error);
+        }
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+    }
+
+    @ExceptionHandler(value = SecurityFailedException.class)
+    public ResponseEntity<ErrorResponse> handleSecurityFailedException(HttpServletRequest request, HttpServletResponse response, SecurityFailedException e) {
+
+            ErrorResponse error = new ErrorResponse();
+            error.setFaultId((long) e.hashCode());
+            error.setTimestamp(OffsetDateTime.now());
+            error.setStatus(HttpStatus.FORBIDDEN.value());
+            error.setMessage(e.getMessage());
+            error.setPath(request.getRequestURI());
+
+        return new ResponseEntity(error, HttpStatus.FORBIDDEN);
 
     }
 

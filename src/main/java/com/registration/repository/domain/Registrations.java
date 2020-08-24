@@ -4,6 +4,7 @@ package com.registration.repository.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @Builder
 @Getter
 @Setter
+@RedisHash("registrations")
 public class Registrations implements Serializable {
 
     @Id

@@ -12,7 +12,7 @@ pipeline {
         stage('Build With Unit Tests') {
                     steps {
                      configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn clean install -Punit-tests -s $MAVEN_SETTINGS'
+                            sh 'mvn clean install -Punit-tests -DskipTests -s $MAVEN_SETTINGS'
                      }
                         
                     }
@@ -43,7 +43,7 @@ pipeline {
                      }
 
          }
-          stage('Start Application') {
+         /*  stage('Start Application') {
                         steps {
                                  dir("${env.WORKSPACE}/deploy/scripts") {
                                     echo "Current Dir is:"
@@ -51,17 +51,17 @@ pipeline {
                                     sh "./start-app.sh"
                                  }
                         }
-          }
+          } */
         stage('Integration Tests') {
                steps {
-                    sleep(time:5,unit:"SECONDS")
+                    //sleep(time:5,unit:"SECONDS")
                     configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
-                        sh "mvn clean install -Pintegration-tests -s $MAVEN_SETTINGS"
+                        sh "mvn clean install -Pintegration-tests,docker-containers -Dcom.atomikos.icatch.enable_logging=false -s $MAVEN_SETTINGS"
                     }
                       
                }
         }
-          stage('Stop Application') {
+          /* stage('Stop Application') {
                steps {
                         echo "Current Dir is:"
                         sh "pwd"
@@ -69,7 +69,7 @@ pipeline {
                           sh "./stop-app.sh"
                         }
                }
-         }
+         } */
         stage('Sonar Scan') {
                steps {
                    configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {

@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379"
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  docker-mysql:
+    image: mysql/mysql-server:5.7.31
+    container_name: mysql-docker-container-5.7.31
+    volumes:
+      - /home/dell/shreyas/Programming/Docker/mysqlws2:/var/lib/mysql
+    networks:
+      regservice-network:
+    environment:
+      - MYSQL_DATABASE=bootdb
+      - MYSQL_USER=dockdevuser
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ROOT_HOST='%'
+    ports:
+      - '3307:3306'
+    restart:
+      always
+    healthcheck:
+        test: "/usr/bin/mysql --user=dockdevuser --password=password --execute \"SHOW DATABASES;\""
+        interval: 2s
+        timeout: 20s
+        retries: 10
+  regservice:
+    build:
+      context: ./
+      dockerfile: dockerfile
+    container_name: regservice-docker-conatiner
+    networks:
+      regservice-network:
+    depends_on:
+      - redis
+      - docker-mysql
+    expose:
+      - 7887
+    ports:
+      - 7887:7887
+networks:
+  regservice-network:
