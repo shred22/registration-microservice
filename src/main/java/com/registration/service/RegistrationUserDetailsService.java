@@ -2,6 +2,7 @@ package com.registration.service;
 
 
 import com.registration.repository.UserRepository;
+import com.registration.repository.domain.RegistrationUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -26,15 +26,20 @@ services:
     networks:
       regservice-network:
     environment:
-      - MYSQL_DATABASE=bootdb
-      - MYSQL_USER=dockdevuser
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=/run/secrets/mysql_db_name
+      - MYSQL_USER=/run/secrets/mysql_db_username
+      - MYSQL_ROOT_PASSWORD=/run/secrets/mysql_db_password
       - MYSQL_ROOT_HOST='%'
+    secrets:
+      - mysql_db_name
+      - mysql_db_username
+      - mysql_db_password
+
     ports:
       - '3307:3306'
     restart:
       always
-  regservice:
+  docker-regservice:
     build:
       context: ./
       dockerfile: Dockerfile
@@ -51,3 +56,11 @@ services:
       - 7887:7887
 networks:
   regservice-network:
+
+secrets:
+  mysql_db_password:
+    external: true
+  mysql_db_username:
+    external: true
+  mysql_db_name:
+    external: true

@@ -219,8 +219,20 @@
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.1</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.atlassian.oai</groupId>
@@ -583,6 +595,30 @@
                     </execution>
                 </executions>
             </plugin>-->
+            <plugin>
+                <groupId>net.serenity-bdd.maven.plugins</groupId>
+                <artifactId>serenity-maven-plugin</artifactId>
+                <version>2.2.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.serenity-bdd</groupId>
+                        <artifactId>serenity-core</artifactId>
+                        <version>2.2.2</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <tags>docker-regservice</tags>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>serenity-reports</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -644,47 +680,47 @@
                 </plugins>
             </build>
         </profile>
-       <!-- <profile>
-            <id>test-local</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.6.0</version>
-                        <executions>
-                            <execution>
-                                <id>start-app</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>${project.basedir}/src/main/resources/scripts/start-app-local.sh
-                                    </executable>
-                                    <arguments>${project.basedir}</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>stop-app</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>${project.basedir}/src/main/resources/scripts/stop-app-local.sh
-                                    </executable>
-                                    <arguments>${project.basedir}</arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>-->
+        <!-- <profile>
+             <id>test-local</id>
+             <activation>
+                 <activeByDefault>false</activeByDefault>
+             </activation>
+             <build>
+                 <plugins>
+                     <plugin>
+                         <groupId>org.codehaus.mojo</groupId>
+                         <artifactId>exec-maven-plugin</artifactId>
+                         <version>1.6.0</version>
+                         <executions>
+                             <execution>
+                                 <id>start-app</id>
+                                 <phase>pre-integration-test</phase>
+                                 <goals>
+                                     <goal>exec</goal>
+                                 </goals>
+                                 <configuration>
+                                     <executable>${project.basedir}/src/main/resources/scripts/start-app-local.sh
+                                     </executable>
+                                     <arguments>${project.basedir}</arguments>
+                                 </configuration>
+                             </execution>
+                             <execution>
+                                 <id>stop-app</id>
+                                 <phase>post-integration-test</phase>
+                                 <goals>
+                                     <goal>exec</goal>
+                                 </goals>
+                                 <configuration>
+                                     <executable>${project.basedir}/src/main/resources/scripts/stop-app-local.sh
+                                     </executable>
+                                     <arguments>${project.basedir}</arguments>
+                                 </configuration>
+                             </execution>
+                         </executions>
+                     </plugin>
+                 </plugins>
+             </build>
+         </profile>-->
         <profile>
             <id>docker-containers</id>
             <activation>

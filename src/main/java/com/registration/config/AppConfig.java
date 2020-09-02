@@ -22,16 +22,38 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import javax.sql.DataSource;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static java.util.Objects.requireNonNull;
+
 @Configuration
 public class AppConfig {
 
+
     @Autowired
     private Environment env;
+
+    @Bean(value = "signingKeyStore")
+    public KeyStore setupKeyStore() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        char[] keyStorePassword = env.getProperty("regservice.jwt.keystorePassword").toCharArray();
+        try(InputStream keyStoreData = new FileInputStream(requireNonNull(env.getProperty("regservice.jwt.signingKeyStore")))){
+            keyStore.load(keyStoreData, keyStorePassword);
+        }
+
+        return keyStore;
+    }
+
+
 
     @Primary
     @Bean

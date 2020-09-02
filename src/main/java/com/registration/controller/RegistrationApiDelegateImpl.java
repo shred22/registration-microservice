@@ -13,6 +13,7 @@ import org.openapitools.model.RegistrationResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +43,8 @@ public class RegistrationApiDelegateImpl implements RegisterApiDelegate {
     @Transactional
     public ResponseEntity<RegistrationResponse> registerPost(String authToken, RegistrationRequest registrationRequest) {
         LOG.info("Request Landed with Header Param : {} and Request Body as : {}", authToken, registrationRequest);
-        Registrations registrations = registrationService.saveRegistrations(registrationRequest);;
+        Registrations registrations = registrationService.saveRegistrations(registrationRequest);
+        ;
         LOG.info("Returning response with Registration Id and other details ");
         return status(CREATED).body(new RegistrationResponse().registrationId(registrations.getRegistrationId()).status(valueOf(registrations.getStatus())));
     }
@@ -53,6 +55,15 @@ public class RegistrationApiDelegateImpl implements RegisterApiDelegate {
         Consumer consumer = consumerService.findConsumerById(registrations.getConsumerId()).orElseThrow(EntityNotFoundException::new);
         Address address = addressService.findAddressById(consumer.getAddressId()).orElseThrow(EntityNotFoundException::new);
         return ok(registrationService.buildRegistrationDetailResponse(registrations, consumer, address));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<Void> registerRegIdDelete(Long regId) {
+        if (registrationService.deleteRegistrationById(regId) > 0) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        throw new EntityNotFoundException("No Record with Id " + regId + " exists at our end.");
     }
 
 }

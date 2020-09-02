@@ -1,6 +1,7 @@
 package com.registration.integration.test;
 
 
+import org.junit.runner.RunWith;
 import org.openapitools.model.AuthenticationRequest;
 import org.openapitools.model.AuthenticationResponse;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -8,9 +9,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration
 //@SpringBootTest(classes = {TestConfig.class, StartApplication.class})
 public abstract class BaseIntegrationTest {

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.registration.handler.error.SchemaValidationFailedException;
 import com.registration.validation.BaseSchemaValidationService;
-import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,10 +15,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.ArrayUtils.isNotEmpty;
 
 @Aspect
 @Configuration
@@ -35,6 +36,7 @@ public class BaseSchemaValidationAspect {
 
         RegistrationRequest_POST("registrationapi.yaml", "/register", "RegistrationRequest", HttpMethod.POST, new String[] {"authToken"}),
         RegistrationRequest_GET("registrationapi.yaml", "/register/{regId}","RegistrationRequest", HttpMethod.GET, new String[] {"authToken"}),
+        RegistrationRequest_DELETE("registrationapi.yaml", "/register/{regId}","RegistrationRequest", HttpMethod.GET, new String[] {"authToken"}),
         RegistrationResponse("registrationapi.yaml", "/register", "RegistrationResponse", HttpMethod.POST),
         RegistrationDetailResponse("registrationapi.yaml", "/register/{regId}","RegistrationDetailResponse", HttpMethod.GET),
         AuthenticationRequest("authenticationapi.yaml", "/authenticate", "AuthenticationRequest", HttpMethod.POST),
@@ -78,7 +80,7 @@ public class BaseSchemaValidationAspect {
         }
 
         public static RequestToApiFileMapping requestToEnum(String value) {
-            List<RequestToApiFileMapping> apiFileMappings = Arrays.asList(RequestToApiFileMapping.values());
+            List<RequestToApiFileMapping> apiFileMappings = asList(RequestToApiFileMapping.values());
             for(RequestToApiFileMapping mapping : apiFileMappings) {
                 if(mapping.getRequestClassName().equals(value)) {
                     return mapping;
@@ -95,7 +97,8 @@ public class BaseSchemaValidationAspect {
     public void validateSchemaBeforeAPIProcessing(JoinPoint joinPoint) {
         //Advice
         //Exclude if args are empty and if the invoked method is of type HTTP GET
-        if (ArrayUtils.isNotEmpty(joinPoint.getArgs()) && !joinPoint.getSignature().getName().contains("Get")) {
+
+        if (isNotEmpty(joinPoint.getArgs()) && asList("Get", "Delete").stream().anyMatch(httpMthod -> httpMthod.contains(joinPoint.getSignature().getName()))) {
             logger.info("Schema Validation Initiated {}", joinPoint);
             try {
                 RequestToApiFileMapping requestToApiFileMapping = RequestToApiFileMapping.requestToEnum(joinPoint.getArgs()[joinPoint.getArgs().length - 1].getClass().getSimpleName());
@@ -115,7 +118,7 @@ public class BaseSchemaValidationAspect {
     public void validateSchemaAfterAPIProcessing(JoinPoint joinPoint, ResponseEntity<?> retVal) {
         //Advice
         //Exclude if return value is empty
-        if (retVal!= null ) {
+        if (retVal.getBody() != null ) {
              logger.info("Initiating Response Schema  validation . {} ", joinPoint);
             try {
                 RequestToApiFileMapping requestToApiFileMapping = RequestToApiFileMapping.requestToEnum(retVal.getBody().getClass().getSimpleName());

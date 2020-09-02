@@ -61,9 +61,7 @@ public class BaseSchemaValidationService {
         String path = null;
 
         ClassPathResource cpr = new ClassPathResource("apispecs/" + specFileName);
-        //File file = ResourceUtils.getFile("classpath:apispecs/" + specFileName);
         path = cpr.getPath();
-
 
         LOG.info("Loaded File for validation from path : " + path);
         return OpenApiInteractionValidator.createFor(path)

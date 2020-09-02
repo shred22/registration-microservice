@@ -78,6 +78,33 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorResponse'
+        delete:
+            parameters:
+                - name: regId
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+            responses:
+                '200':
+                    headers:
+                        X-Correlation-Id:
+                            schema:
+                                type: string
+                                description: Co-relation-Id for this transaction.
+                    description: OK
+                '400':
+                    headers:
+                        X-Correlation-Id:
+                            schema:
+                                type: string
+                                description: Co-relation-Id for this transaction.
+                    description: BAD REQUEST
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
 
 components:
     schemas:

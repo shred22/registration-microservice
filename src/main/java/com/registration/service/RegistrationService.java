@@ -10,6 +10,7 @@ import org.openapitools.model.RegistrationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,10 @@ public class RegistrationService {
         return registrationRepository.findById(regId);
     }
 
-
+    @CacheEvict(value = "registrationsCache", key = "#regId")
+    public int deleteRegistrationById(Long regId) {
+        LOG.info("Deleting Registration with Id {}", regId);
+        return registrationRepository.softDeleteRegistrationById(regId);
+    }
 
 }

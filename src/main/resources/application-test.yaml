@@ -30,7 +30,7 @@ spring:
     show-sql: true
   redis:
     host: localhost
-    port: 6479
+    port: 6379
     password:
     lettuce:
       pool:
@@ -58,3 +58,12 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+
+regservice:
+  jwt:
+    keystorePassword: storepassword
+    privatekeyPassword: keypassword
+    signingKeyStore: signing-keys.jks
+    verificationKeyStore: verification-keys.jks
+    signing:
+      alias: regservice-jwt-signing

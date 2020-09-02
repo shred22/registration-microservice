@@ -5,6 +5,7 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.SnippetType;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
 
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
@@ -13,7 +14,7 @@ import org.junit.runner.RunWith;
         snippets = SnippetType.CAMELCASE,
         glue = {"com.registration.integration.test.steps"}, // packages used for glue code, looked up in the classpath
         tags = {"not @manual"} )// security
-//@SpringBootTest(classes = TestConfig.class)
+@SpringBootTest
 public class RegApiFeatureRunner {
 }
 

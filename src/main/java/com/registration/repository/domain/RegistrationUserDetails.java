@@ -1,4 +1,4 @@
-package com.registration.service;
+package com.registration.repository.domain;
 
 import com.registration.model.User;
 import org.springframework.security.core.GrantedAuthority;
