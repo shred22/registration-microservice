@@ -30,3 +30,8 @@ storepassword
 # ==== command to export public key certificate =====
 
 keytool -list -rfc -keystore verification-keys.jks -alias regservice-public-csr -storepass storepassword
+
+
+docker container run -d -p8080:8080 --name jenkins-docker --detach --privileged --network jenkins --env DOCKER_TLS_CERTDIR=/certs --volume /mnt/4eb7b4aa-1b51-4b48-b176-9fbc7b9c5f9e/Docker/Jenkins/jenkins-docker-certs:/certs/client --volume /mnt/4eb7b4aa-1b51-4b48-b176-9fbc7b9c5f9e/Docker/Jenkins/jenkins-data:/var/jenkins_home jenkins/jenkins
+
+docker container run -u -p8080:8080 --name jenkins-docker --volume=/home/dell/shreyas/Programming/Docker/jenkins-data:/var/jenkins_home --privileged -d jenkins/jenkins
