@@ -71,8 +71,8 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest implements En
         HttpHeaders headers = new HttpHeaders();
         headers.add("authToken", "Bearer "+jwt);
         HttpEntity registrationRequestHttpEntity = new HttpEntity(registrationRequest, headers);
-        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "http://localhost:7887/register");
-        ResponseEntity<RegistrationDetailResponse> responseEntity = template.exchange("http://localhost:7887/register/{regId}", HttpMethod.GET, registrationRequestHttpEntity, RegistrationDetailResponse.class, Map.of("regId", registrationId));
+        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "https://localhost:7887/register");
+        ResponseEntity<RegistrationDetailResponse> responseEntity = template.exchange("https://localhost:7887/register/{regId}", HttpMethod.GET, registrationRequestHttpEntity, RegistrationDetailResponse.class, Map.of("regId", registrationId));
         registrationDetailResponse = responseEntity.getBody();
         statusCode = responseEntity.getStatusCode();
         Serenity.recordReportData().withTitle("Registration API test Results").andContents(registrationResponse.toString());
@@ -87,8 +87,8 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest implements En
         headers = new HttpHeaders();
         headers.add("authToken", "Bearer "+jwt);
         HttpEntity<RegistrationRequest> registrationRequestHttpEntity = new HttpEntity<>(registrationRequest, headers);
-        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "http://localhost:7887/register");
-        ResponseEntity<RegistrationResponse> registrationResponseResponseEntity = template.exchange("http://localhost:7887/register", HttpMethod.POST, registrationRequestHttpEntity, RegistrationResponse.class);
+        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "https://localhost:7887/register");
+        ResponseEntity<RegistrationResponse> registrationResponseResponseEntity = template.exchange("https://localhost:7887/register", HttpMethod.POST, registrationRequestHttpEntity, RegistrationResponse.class);
         registrationResponse = registrationResponseResponseEntity.getBody();
         registrationId = registrationResponse.getRegistrationId();
         statusCode = registrationResponseResponseEntity.getStatusCode();

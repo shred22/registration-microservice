@@ -21,7 +21,7 @@ public abstract class BaseIntegrationTest {
         RestTemplate restTemplate = new RestTemplate();
         TestRestTemplate testRestTemplate =  new TestRestTemplate();
 
-        String uri = "http://localhost:7887/authenticate";
+        String uri = "https://localhost:7887/authenticate";
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         AuthenticationRequest request = new AuthenticationRequest();

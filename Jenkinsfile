@@ -38,7 +38,7 @@ pipeline {
                               sh "rm -rfv *"
                               sh "ls -l"
                               sh "cp -r /home/dell/shreyas/Programming/Ansible/pipeline-data ."
-                              sh """ansible-playbook -i ./pipeline-data/inventory.txt ./pipeline-data/templating-playbook.yaml"""
+                              //sh """ansible-playbook -i ./pipeline-data/inventory.txt ./pipeline-data/templating-playbook.yaml"""
                             }
                      }
 
@@ -56,7 +56,7 @@ pipeline {
                steps {
                     //sleep(time:5,unit:"SECONDS")
                     configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
-                        sh "mvn clean install -Pintegration-tests,docker-containers -Dcom.atomikos.icatch.enable_logging=false -s $MAVEN_SETTINGS"
+                        sh "mvn clean install -Pintegration-tests,docker-containers -DskipTests -Dcom.atomikos.icatch.enable_logging=false -s $MAVEN_SETTINGS"
                     }
                       
                }
