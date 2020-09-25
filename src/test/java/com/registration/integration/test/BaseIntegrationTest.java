@@ -1,7 +1,6 @@
 package com.registration.integration.test;
 
 
-import org.junit.runner.RunWith;
 import org.openapitools.model.AuthenticationRequest;
 import org.openapitools.model.AuthenticationResponse;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -9,13 +8,18 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import java.util.List;
+
+//@RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration
 //@SpringBootTest(classes = {TestConfig.class, StartApplication.class})
 public abstract class BaseIntegrationTest {
+
+    public static void main(String[] args) {
+        testIt();
+    }
 
     protected String getAuthToken() {
         RestTemplate restTemplate = new RestTemplate();
@@ -31,6 +35,16 @@ public abstract class BaseIntegrationTest {
         HttpEntity<AuthenticationRequest> entity = new HttpEntity<>(request, headers);
         ResponseEntity<AuthenticationResponse> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, entity, AuthenticationResponse.class);
         return responseEntity.getBody().getJwt();
+    }
+
+    public static void testIt() {
+        List<String> strings = null;
+
+
+        for(String s : strings) {
+            System.out.println(" : : "+s);
+        }
+
     }
 
 }

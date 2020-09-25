@@ -1,4 +1,80 @@
+server:
+  ssl:
+    key-store-type: JKS
+    key-store: classpath:ssl/ssl-httprest-server.jks
+    key-store-password: storepassword
+    key-alias: server-ssl
+    key-store-provider: SUN
+    key-password: keypassword
+  port: 7887
 
-registration:
-  api:
-   url: http://localhost:7887/register
+spring:
+  jta:
+    enabled: true
+    service: com.atomikos.icatch.standalone.UserTransactionServiceFactory
+    max-actives: 200
+    enable-logging: true
+    atomikos:
+      datasource:
+        unique-resource-name: dataSourceOne
+        max-pool-size: 5
+        min-pool-size: 1
+        max-life-time: 20000
+        borrow-connection-timeout: 10000
+        xa-data-source-class-name: com.mysql.cj.jdbc.MysqlXADataSource
+        xa-properties:
+          user: devuser
+          password: password
+          URL: jdbc:mysql://localhost:3306/bootdb?useSSL=false
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 7
+        max-idle: 7
+        max-wait: 100ms
+        min-idle: 2
+        shutdown-timeout: 2000ms
+  cache:
+    type: redis
+    redis:
+      use-key-prefix: false
+      cache-null-values: false
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+regservice:
+  jwt:
+    keystorePassword: storepassword
+    privatekeyPassword: keypassword
+    signingKeyStore: signing-keys.jks
+    verificationKeyStore: verification-keys.jks
+    signing:
+      alias: regservice-jwt-signing
+
+endpoints:
+  apis:
+    registration: http://localhost:7887/register
+    authentication: http://localhost:7887/authenticate
