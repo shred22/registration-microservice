@@ -1,11 +1,4 @@
 server:
-  ssl:
-    key-store-type: JKS
-    key-store: classpath:ssl/ssl-httprest-server.jks
-    key-store-password: storepassword
-    key-alias: server-ssl
-    key-store-provider: SUN
-    key-password: keypassword
   port: 7887
 
 spring:

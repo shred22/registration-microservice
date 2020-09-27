@@ -33,6 +33,13 @@
         <dbdeploy.password>password</dbdeploy.password>
         <swagger-request-validator.version>2.9.1</swagger-request-validator.version>
         <jar>${project.basedir}/registration-service.jar</jar>
+        <serenity.version>2.3.4</serenity.version>
+        <serenity.maven.version>2.3.4</serenity.maven.version>
+        <serenity.cucumber.version>2.3.4</serenity.cucumber.version>
+        <parallel.tests>4</parallel.tests>
+        <encoding>UTF-8</encoding>
+        <serenity.test.root></serenity.test.root>
+        <tags></tags>
     </properties>
 
     <scm>
@@ -116,7 +123,6 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <!-- <version>6.0.6</version>-->
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
@@ -161,6 +167,17 @@
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-core</artifactId>
+            <version>${serenity.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.cucumber</groupId>
+                    <artifactId>cucumber-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-core</artifactId>
             <version>2.0.70</version>
             <exclusions>
                 <exclusion>
@@ -190,6 +207,11 @@
                     <artifactId>cucumber-core</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-core</artifactId>
+            <version>4.2.0</version>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
@@ -260,15 +282,6 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>1.11.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
         </dependency>
     </dependencies>
 
@@ -725,6 +738,72 @@
                  </plugins>
              </build>
          </profile>-->
+        <profile>
+            <id>build-tag-image</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>build-and-tag-docker-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>
+                                        ${project.basedir}/src/main/resources/scripts/build-docker-image.sh
+                                    </executable>
+                                    <arguments>
+                                        <argument>${project.basedir}</argument>
+                                        <argument>${project.version}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>push-docker-image</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>push-docker-image</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>
+                                        ${project.basedir}/src/main/resources/scripts/push-docker-image.sh
+                                    </executable>
+                                    <arguments>
+                                        <argument>${project.basedir}</argument>
+                                        <argument>${project.version}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>docker-containers</id>
             <activation>

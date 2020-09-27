@@ -1,6 +1,8 @@
 package com.registration.integration.test.steps;
 
 import com.registration.integration.test.BaseIntegrationTest;
+import com.registration.integration.test.config.Context;
+import com.registration.integration.test.config.ScenarioContext;
 import com.registration.request.factories.RegistrationApiRequestFactory;
 import cucumber.api.java8.En;
 import net.serenitybdd.core.Serenity;
@@ -28,24 +30,12 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest implements En
     private RegistrationResponse registrationResponse;
     private HttpStatus statusCode;
     private HttpHeaders responseHeaders;
-    private String jwt;
-    private Long registrationId;
+    private static String jwt;
+    private static Long registrationId;
     private RegistrationDetailResponse registrationDetailResponse;
-
-    /*@ClassRule
-    public static GenericContainer simpleWebServer
-            = new GenericContainer("redis:alpine")
-            .withExposedPorts(6479)
-            .withNetwork(Network.builder() .driver("bridge").build())
-            .withCommand("/bin/sh", "-c", "while true; do echo "
-                    + "\"HTTP/1.1 200 OK\n\nHello World!\" | nc -l -p 80; done");*/
+    private ScenarioContext context = new ScenarioContext();
 
 
-    /*
-    Given registration API get request
-    When the client calls service to get details
-    Then verify expected result with registration details
-     */
     public RegistrationApiITestSteps() {
         Given("^registration API request$", this::createRegistrationRequest);
         When("^the client calls service$", this::invokeService);
@@ -55,13 +45,17 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest implements En
         When("^the client calls service to get details$", this::invokeGetService);
         Then("^verify expected result with registration details$", this::validateDetailsResult);
     }
+
     private void createRegistrationRequest() {
         LOGGER.info("----- Preparing Registration Request ------");
         registrationRequest = requestFactory.createRegistrationRequest();
     }
+
     private void createGetRegistrationRequest() {
         LOGGER.info("----- Preparing Registration Request ------");
         registrationRequest = requestFactory.createRegistrationRequest();
+
+
     }
 
     private void invokeGetService() {
@@ -69,14 +63,15 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest implements En
         LOGGER.info("----- Invoking GET REST Service -------");
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.add("authToken", "Bearer "+jwt);
+        headers.add("authToken", "Bearer " + jwt);
         HttpEntity registrationRequestHttpEntity = new HttpEntity(registrationRequest, headers);
-        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "https://localhost:7887/register");
-        ResponseEntity<RegistrationDetailResponse> responseEntity = template.exchange("https://localhost:7887/register/{regId}", HttpMethod.GET, registrationRequestHttpEntity, RegistrationDetailResponse.class, Map.of("regId", registrationId));
+        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "http://localhost:7887/register");
+        ResponseEntity<RegistrationDetailResponse> responseEntity = template.exchange("http://localhost:7887/register/{regId}", HttpMethod.GET, registrationRequestHttpEntity, RegistrationDetailResponse.class, Map.of("regId", registrationId));
         registrationDetailResponse = responseEntity.getBody();
         statusCode = responseEntity.getStatusCode();
-        Serenity.recordReportData().withTitle("Registration API test Results").andContents(registrationResponse.toString());
+        Serenity.recordReportData().withTitle("Registration API test Results").andContents(registrationDetailResponse.toString());
     }
+
     private void invokeService() {
 
         jwt = getAuthToken();
@@ -85,12 +80,13 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest implements En
         LOGGER.info("----- Invoking REST Service -------");
         RestTemplate template = new RestTemplate();
         headers = new HttpHeaders();
-        headers.add("authToken", "Bearer "+jwt);
+        headers.add("authToken", "Bearer " + jwt);
         HttpEntity<RegistrationRequest> registrationRequestHttpEntity = new HttpEntity<>(registrationRequest, headers);
-        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "https://localhost:7887/register");
-        ResponseEntity<RegistrationResponse> registrationResponseResponseEntity = template.exchange("https://localhost:7887/register", HttpMethod.POST, registrationRequestHttpEntity, RegistrationResponse.class);
+        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "http://localhost:7887/register");
+        ResponseEntity<RegistrationResponse> registrationResponseResponseEntity = template.exchange("http://localhost:7887/register", HttpMethod.POST, registrationRequestHttpEntity, RegistrationResponse.class);
         registrationResponse = registrationResponseResponseEntity.getBody();
         registrationId = registrationResponse.getRegistrationId();
+        context.setContext(Context.REG_ID, registrationId);
         statusCode = registrationResponseResponseEntity.getStatusCode();
         responseHeaders = registrationResponseResponseEntity.getHeaders();
         Serenity.recordReportData().withTitle("Registration API test Results").andContents(registrationResponse.toString());
