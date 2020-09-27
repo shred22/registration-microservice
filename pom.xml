@@ -653,7 +653,7 @@
                         <version>3.0.0-M5</version>
                         <configuration>
                             <includes>
-                                <include>com.registration.tests.**</include>
+                                <include>com.registration.tests.**.java</include>
                             </includes>
                             <excludes>
                                 <exclude>com.registration.integration.test.**</exclude>
