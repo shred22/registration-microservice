@@ -168,65 +168,31 @@
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-core</artifactId>
             <version>${serenity.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.cucumber</groupId>
-                    <artifactId>cucumber-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
-            <artifactId>serenity-core</artifactId>
-            <version>2.0.70</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.cucumber</groupId>
-                    <artifactId>cucumber-core</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>serenity-junit</artifactId>
+            <version>${serenity.version}</version>
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
-            <artifactId>serenity-cucumber4</artifactId>
-            <version>1.0.21</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.cucumber</groupId>
-                    <artifactId>cucumber-core</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>serenity-screenplay</artifactId>
+            <version>${serenity.version}</version>
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
-            <artifactId>serenity-spring</artifactId>
-            <version>2.0.70</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.cucumber</groupId>
-                    <artifactId>cucumber-core</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>serenity-screenplay-webdriver</artifactId>
+            <version>${serenity.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-core</artifactId>
-            <version>4.2.0</version>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-ensure</artifactId>
+            <version>${serenity.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <version>4.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java8</artifactId>
-            <version>4.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit</artifactId>
-            <version>4.2.0</version>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-cucumber6</artifactId>
+            <version>${serenity.cucumber.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -393,36 +359,26 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.0.0-M5</version>
+                <configuration>
+                    <includes>
+                        <include>**/integration/**/*.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*WithFailures.java</exclude>
+                    </excludes>
+                    <parallel>methods</parallel>
+                    <useUnlimitedThreads>true</useUnlimitedThreads>
+                </configuration>
                 <executions>
-                    <!--
-                        Ensures that both integration-test and verify goals of the Failsafe Maven
-                        plugin are executed.
-                    -->
                     <execution>
-                        <id>integration-tests</id>
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
-                        <configuration>
-                            <!-- Sets the VM argument line usgration tests are run. -->
-                            <argLine>${failsafeArgLine}</argLine>
-                            <excludes>
-                                <exclude>com.registration.tests.**</exclude>
-                                <exclude>com.registration.integration.test.**</exclude>
-                            </excludes>
-                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>com.registration.tests.**</exclude>
-                        <exclude>com.registration.integration.test.**</exclude>
-                    </excludes>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -561,57 +517,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <!--<plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.33.0</version>
-                <configuration>
-                    <verbose>true</verbose>
-                    <images>
-                        <image>
-                            <name>${docker.image.prefix}/${project.artifactId}</name>
-                            <build>
-                                <dockerFileDir>${project.basedir}</dockerFileDir>
-                                <assembly>
-                                    <descriptorRef>artifact</descriptorRef>
-                                </assembly>
-                                <tags>
-                                    <tag>${project.version}</tag>
-                                    <tag>latest</tag>
-                                </tags>
-                            </build>
-                            <run>
-                                <network>
-                                    <mode>custom</mode>
-                                    <name>logging-log4j2_regservice-network</name>
-                                </network>
-                                <ports>
-                                    <port>7887:7887</port>
-                                </ports>
-                            </run>
-                        </image>
-                    </images>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>start</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            &lt;!&ndash; "build" should be used to create the images with the
-                                 artifact &ndash;&gt;
-                            <goal>build</goal>
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>stop</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
             <plugin>
                 <groupId>net.serenity-bdd.maven.plugins</groupId>
                 <artifactId>serenity-maven-plugin</artifactId>
@@ -623,9 +528,6 @@
                         <version>2.2.2</version>
                     </dependency>
                 </dependencies>
-                <configuration>
-                    <tags>docker-regservice</tags>
-                </configuration>
                 <executions>
                     <execution>
                         <id>serenity-reports</id>
@@ -681,63 +583,9 @@
                             </excludes>
                         </configuration>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>3.0.0-M5</version>
-                        <configuration>
-                            <includes>
-                                <include>com.registration.integration.test.**Runner.java</include>
-                            </includes>
-                            <excludes>
-                                <exclude>com.registration.tests.**</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
-        <!-- <profile>
-             <id>test-local</id>
-             <activation>
-                 <activeByDefault>false</activeByDefault>
-             </activation>
-             <build>
-                 <plugins>
-                     <plugin>
-                         <groupId>org.codehaus.mojo</groupId>
-                         <artifactId>exec-maven-plugin</artifactId>
-                         <version>1.6.0</version>
-                         <executions>
-                             <execution>
-                                 <id>start-app</id>
-                                 <phase>pre-integration-test</phase>
-                                 <goals>
-                                     <goal>exec</goal>
-                                 </goals>
-                                 <configuration>
-                                     <executable>${project.basedir}/src/main/resources/scripts/start-app-local.sh
-                                     </executable>
-                                     <arguments>${project.basedir}</arguments>
-                                 </configuration>
-                             </execution>
-                             <execution>
-                                 <id>stop-app</id>
-                                 <phase>post-integration-test</phase>
-                                 <goals>
-                                     <goal>exec</goal>
-                                 </goals>
-                                 <configuration>
-                                     <executable>${project.basedir}/src/main/resources/scripts/stop-app-local.sh
-                                     </executable>
-                                     <arguments>${project.basedir}</arguments>
-                                 </configuration>
-                             </execution>
-                         </executions>
-                     </plugin>
-                 </plugins>
-             </build>
-         </profile>-->
         <profile>
             <id>build-tag-image</id>
             <activation>

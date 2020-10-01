@@ -12,9 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration
-//@SpringBootTest(classes = {TestConfig.class, StartApplication.class})
+
 public abstract class BaseIntegrationTest {
 
     public static void main(String[] args) {

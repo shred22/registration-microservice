@@ -1,3 +1,5 @@
+@cucumber
+@completing
 Feature: Scenario to demonstrate actual spring registration service call from bdd test
 
   Scenario: Verify status after registration service call
