@@ -70,11 +70,25 @@ pipeline {
                                     }
                                    configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
                                           sh "mvn install -DskipTests -Ppush-docker-image -s $MAVEN_SETTINGS"
+
                                    }
                              }
 
                          }
                        }
+                }
+                stage('Uploa TestReport') {
+                    steps {
+                    echo 'Publishing Serenity TestReport'
+                         publishHTML(target: [
+                                                                                  reportName : 'Serenity',
+                                                                                  reportDir:   'target/site/serenity',
+                                                                                  reportFiles: 'index.html',
+                                                                                  keepAll:     true,
+                                                                                  alwaysLinkToLastBuild: true,
+                                                                                  allowMissing: false
+                                                                              ])
+                    }
                 }
 
         stage('Sonar Scan') {
