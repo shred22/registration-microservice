@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -22,7 +23,6 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import javax.sql.DataSource;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -46,13 +46,12 @@ public class AppConfig {
     public KeyStore setupKeyStore() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         char[] keyStorePassword = env.getProperty("regservice.jwt.keystorePassword").toCharArray();
-        try(InputStream keyStoreData = new FileInputStream(requireNonNull(env.getProperty("regservice.jwt.signingKeyStore")))){
+
+        try(InputStream keyStoreData = new ClassPathResource(requireNonNull(env.getProperty("regservice.jwt.signingKeyStore"))).getInputStream()){
             keyStore.load(keyStoreData, keyStorePassword);
         }
-
         return keyStore;
     }
-
 
 
     @Primary

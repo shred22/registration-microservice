@@ -1,5 +1,16 @@
 server:
   port: 7887
+  # The format used for the keystore. It could be set to JKS in case it is a JKS file
+  ssl:
+    key-store-type: JKS
+  # The path to the keystore containing the certificate
+    key-store: classpath:ssl/ssl-httprest-server.jks
+  # The password used to generate the certificate
+    key-store-password: storepassword
+  # The alias mapped to the certificate
+    key-alias: server-ssl
+    enabled: true
+    key-password: keypassword
 
 spring:
   jta:
@@ -62,7 +73,7 @@ regservice:
   jwt:
     keystorePassword: storepassword
     privatekeyPassword: keypassword
-    signingKeyStore: signing-keys.jks
+    signingKeyStore: ssl/signing-keys.jks
     verificationKeyStore: verification-keys.jks
     signing:
       alias: regservice-jwt-signing

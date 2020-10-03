@@ -1,5 +1,15 @@
 server:
   port: 7887
+  ssl:
+    key-store-type: JKS
+    # The path to the keystore containing the certificate
+    key-store: classpath:ssl/ssl-httprest-server.jks
+    # The password used to generate the certificate
+    key-store-password: storepassword
+    # The alias mapped to the certificate
+    key-alias: server-ssl
+    enabled: true
+    key-password: keypassword
 
 spring:
   jta:
@@ -19,6 +29,7 @@ spring:
           user: devuser
           password: password
           URL: jdbc:mysql://localhost:3306/bootdb?useSSL=false
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -39,6 +50,7 @@ spring:
         max-wait: 100ms
         min-idle: 2
         shutdown-timeout: 2000ms
+
   cache:
     type: redis
     redis:
@@ -62,7 +74,7 @@ regservice:
   jwt:
     keystorePassword: storepassword
     privatekeyPassword: keypassword
-    signingKeyStore: signing-keys.jks
+    signingKeyStore: ssl/signing-keys.jks
     verificationKeyStore: verification-keys.jks
     signing:
       alias: regservice-jwt-signing

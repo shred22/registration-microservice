@@ -33,6 +33,9 @@ public class RegistrationApiFeatureSteps extends BaseIntegrationTest {
     private static Long registrationId;
     private RegistrationDetailResponse registrationDetailResponse;
 
+
+
+
     @Given("registration API request")
     public void registrationAPIRequest() {
         LOGGER.info("----- Preparing Registration Request ------");
@@ -40,17 +43,17 @@ public class RegistrationApiFeatureSteps extends BaseIntegrationTest {
     }
 
     @When("the client calls service")
-    public void theClientCallsService() {
+    public void theClientCallsService() throws Exception {
         jwt = getAuthToken();
         HttpHeaders headers;
 
         LOGGER.info("----- Invoking REST Service -------");
-        RestTemplate template = new RestTemplate();
+        RestTemplate template = restTemplate();
         headers = new HttpHeaders();
         headers.add("authToken", "Bearer " + jwt);
         HttpEntity<RegistrationRequest> registrationRequestHttpEntity = new HttpEntity<>(registrationRequest, headers);
-        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "http://localhost:7887/register");
-        ResponseEntity<RegistrationResponse> registrationResponseResponseEntity = template.exchange("http://localhost:7887/register", HttpMethod.POST, registrationRequestHttpEntity, RegistrationResponse.class);
+        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "https://localhost:7887/register");
+        ResponseEntity<RegistrationResponse> registrationResponseResponseEntity = template.exchange("https://localhost:7887/register", HttpMethod.POST, registrationRequestHttpEntity, RegistrationResponse.class);
         registrationResponse = registrationResponseResponseEntity.getBody();
         registrationId = registrationResponse.getRegistrationId();
         statusCode = registrationResponseResponseEntity.getStatusCode();
@@ -72,14 +75,14 @@ public class RegistrationApiFeatureSteps extends BaseIntegrationTest {
     }
 
     @When("the client calls service to get details")
-    public void theClientCallsServiceToGetDetails() {
+    public void theClientCallsServiceToGetDetails() throws Exception {
         LOGGER.info("----- Invoking GET REST Service -------");
-        RestTemplate template = new RestTemplate();
+        RestTemplate template =  restTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("authToken", "Bearer " + jwt);
         HttpEntity registrationRequestHttpEntity = new HttpEntity(registrationRequest, headers);
-        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "http://localhost:7887/register");
-        ResponseEntity<RegistrationDetailResponse> responseEntity = template.exchange("http://localhost:7887/register/{regId}", HttpMethod.GET, registrationRequestHttpEntity, RegistrationDetailResponse.class, Map.of("regId", registrationId));
+        LOGGER.info("Invoking Registration Service with Request {} and Endpoint {} : ", registrationRequest.toString(), "https://localhost:7887/register");
+        ResponseEntity<RegistrationDetailResponse> responseEntity = template.exchange("https://localhost:7887/register/{regId}", HttpMethod.GET, registrationRequestHttpEntity, RegistrationDetailResponse.class, Map.of("regId", registrationId));
         registrationDetailResponse = responseEntity.getBody();
         statusCode = responseEntity.getStatusCode();
         Serenity.recordReportData().withTitle("Registration API test Results").andContents(registrationDetailResponse.toString());

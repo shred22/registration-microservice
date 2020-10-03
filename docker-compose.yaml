@@ -43,7 +43,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: shred22/docker-regservice:latest
+    image: shred22/docker-regservice:1.2-SNAPSHOT
     container_name: docker-regservice
     networks:
       regservice-network:

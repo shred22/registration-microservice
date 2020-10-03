@@ -1,17 +1,23 @@
 package com.registration.integration.test;
 
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.openapitools.model.AuthenticationRequest;
 import org.openapitools.model.AuthenticationResponse;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.SSLContext;
 import java.util.List;
-
 
 public abstract class BaseIntegrationTest {
 
@@ -19,11 +25,22 @@ public abstract class BaseIntegrationTest {
         testIt();
     }
 
-    protected String getAuthToken() {
-        RestTemplate restTemplate = new RestTemplate();
-        TestRestTemplate testRestTemplate =  new TestRestTemplate();
+    private Resource trustStore = new ClassPathResource("ssl-httprest-client.jks");
+    private String trustStorePassword = "storepassword";
+    protected RestTemplate restTemplate() throws Exception {
+        SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(trustStore.getURL(), trustStorePassword.toCharArray())
+                .build();
+        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
+        HttpClient httpClient = HttpClients.custom()
+                .setSSLSocketFactory(socketFactory)
+                .build();
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        return new RestTemplate(factory);
+    }
 
-        String uri = "http://localhost:7887/authenticate";
+    protected String getAuthToken() throws Exception {
+        RestTemplate restTemplate = restTemplate();
+        String uri = "https://localhost:7887/authenticate";
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         AuthenticationRequest request = new AuthenticationRequest();

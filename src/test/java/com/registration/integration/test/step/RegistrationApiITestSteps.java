@@ -66,7 +66,7 @@ public class RegistrationApiITestSteps extends BaseIntegrationTest  {
     }
 
     @When("the client calls service")
-    private void invokeService() {
+    private void invokeService() throws Exception {
 
         jwt = getAuthToken();
         HttpHeaders headers;
