@@ -62,12 +62,10 @@
     </distributionManagement>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -159,7 +157,6 @@
             <artifactId>springfox-swagger2</artifactId>
             <version>2.9.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
@@ -199,7 +196,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
         </dependency>
-
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
@@ -226,7 +222,6 @@
             <groupId>com.atlassian.oai</groupId>
             <artifactId>swagger-request-validator-core</artifactId>
             <version>${swagger-request-validator.version}</version>
-            <!--<scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>com.atlassian.oai</groupId>
