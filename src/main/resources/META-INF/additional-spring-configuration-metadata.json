@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "regservice.jwt.signingKeyStore",
+      "type": "java.lang.String",
+      "description": "Description for regservice.jwt.signingKeyStore."
+  }
+] }
