@@ -23,6 +23,7 @@ pipeline {
         stage('Build With Unit Tests') {
                     steps {
                      configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
+                            sh 'mvn -version'
                             sh 'mvn clean test -Punit-tests -s $MAVEN_SETTINGS'
                      }
                         
