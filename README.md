@@ -35,3 +35,12 @@ keytool -list -rfc -keystore verification-keys.jks -alias regservice-public-csr 
 docker container run -d -p8080:8080 --name jenkins-docker --detach --privileged --network jenkins --env DOCKER_TLS_CERTDIR=/certs --volume /mnt/4eb7b4aa-1b51-4b48-b176-9fbc7b9c5f9e/Docker/Jenkins/jenkins-docker-certs:/certs/client --volume /mnt/4eb7b4aa-1b51-4b48-b176-9fbc7b9c5f9e/Docker/Jenkins/jenkins-data:/var/jenkins_home jenkins/jenkins
 
 docker container run -u -p8080:8080 --name jenkins-docker --volume=/home/dell/shreyas/Programming/Docker/jenkins-data:/var/jenkins_home --privileged -d jenkins/jenkins
+
+# === Jenkins Docker Container =====
+
+docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker --network jenkins --name jenkins-container jenkins/jenkins:jdk11
+
+
+# ==== SSL Support ======
+
+All endpoints of this repository works on SSL.
